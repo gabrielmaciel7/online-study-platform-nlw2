@@ -1,39 +1,61 @@
 import React from 'react';
 
+import api from '../../services/api';
+
 import whatsappIcon from '../../assets/images/icons/whatsapp.svg';
 
 import './styles.css';
 
-const TeacherItem: React.FC = () => {
+export interface Teacher {
+  id: number,
+  avatar: string,
+  bio: string,
+  cost: number,
+  name: string,
+  subject: string,
+  whatsapp: string
+}
+
+export interface TeacherItemProps {
+  teacher: Teacher;
+}
+
+const TeacherItem: React.FC<TeacherItemProps> = ({ teacher }) => {
+  function createNewConnection() {
+    api.post('connections', {
+      user_id: teacher.id
+    });
+  }
+
   return (
     <article className="teacher-item">
-          <header>
-            <img src="https://avatars1.githubusercontent.com/u/65022499?s=460&u=fd06f357ea8e416deeb8fe8a0a3f179f54b74124&v=4" alt="Gabriel Maciel" />
-            <div>
-              <strong>Gabriel Maciel</strong>
-              <span>Lorem Ipsum</span>
-            </div>
-          </header>
+      <header>
+        <img src={teacher.avatar} alt={teacher.name} />
+        <div>
+          <strong>{teacher.name}</strong>
+          <span>{teacher.subject}</span>
+        </div>
+      </header>
 
-          <p>
-            blandit cursus risus at ultrices
-          <br />
-          <br />
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tincidunt arcu non sodales neque sodales ut etiam sit amet. Vitae proin sagittis nisl rhoncus mattis. Leo urna molestie at elementum eu facilisis sed.
-          </p>
+      <p>{teacher.bio}</p>
 
-          <footer>
-            <p>
-              Preço/hora
-              <strong>R$ 100,00</strong>
-            </p>
+      <footer>
+        <p>
+          Preço/hora
+              <strong>{teacher.cost}</strong>
+        </p>
 
-            <button type="button">
-              <img src={whatsappIcon} alt="Whatsapp" />
+        <a
+          onClick={createNewConnection}
+          href={`https://wa.me/${teacher.whatsapp}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src={whatsappIcon} alt="Whatsapp" />
               Entrar em contato
-            </button>
-          </footer>
-        </article>
+            </a>
+      </footer>
+    </article>
   );
 }
 
