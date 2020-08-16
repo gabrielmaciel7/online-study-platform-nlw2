@@ -1,10 +1,16 @@
-import React from 'react';
-import { View } from 'react-native';
+import React from "react";
+import { View } from "react-native";
 
-// import { Container } from './styles';
+import styles from "./styles";
+
+import PageHeader from "../../Components/PageHeader";
 
 const TeacherList: React.FC = () => {
-  return <View />;
-}
+  return (
+    <View style={styles.container}>
+      <PageHeader title="Proffys disponíveis" />
+    </View>
+  );
+};
 
 export default TeacherList;
