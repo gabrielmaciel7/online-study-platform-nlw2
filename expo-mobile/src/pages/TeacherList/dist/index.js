@@ -39,6 +39,7 @@ exports.__esModule = true;
 var react_1 = require("react");
 var react_native_1 = require("react-native");
 var vector_icons_1 = require("@expo/vector-icons");
+var async_storage_1 = require("@react-native-community/async-storage");
 var api_1 = require("../../services/api");
 var styles_1 = require("./styles");
 var PageHeader_1 = require("../../Components/PageHeader");
@@ -46,10 +47,20 @@ var TeacherItem_1 = require("../../Components/TeacherItem");
 var react_native_gesture_handler_1 = require("react-native-gesture-handler");
 var TeacherList = function () {
     var _a = react_1.useState([]), teachers = _a[0], setTeachers = _a[1];
-    var _b = react_1.useState(false), isFiltersVisible = _b[0], setIsFiltersVisible = _b[1];
-    var _c = react_1.useState(""), subject = _c[0], setSubject = _c[1];
-    var _d = react_1.useState(""), week_day = _d[0], setWeekDay = _d[1];
-    var _e = react_1.useState(""), time = _e[0], setTime = _e[1];
+    var _b = react_1.useState([]), favorites = _b[0], setFavorites = _b[1];
+    var _c = react_1.useState(false), isFiltersVisible = _c[0], setIsFiltersVisible = _c[1];
+    var _d = react_1.useState(""), subject = _d[0], setSubject = _d[1];
+    var _e = react_1.useState(""), week_day = _e[0], setWeekDay = _e[1];
+    var _f = react_1.useState(""), time = _f[0], setTime = _f[1];
+    function loadFavorites() {
+        async_storage_1["default"].getItem("favorites").then(function (res) {
+            if (res) {
+                var favoritedTeachers = JSON.parse(res);
+                var favoritedTeachersIds = favoritedTeachers.map(function (teacher) { return teacher.id; });
+                setFavorites(favoritedTeachersIds);
+            }
+        });
+    }
     function handleToggleFiltersVisible() {
         setIsFiltersVisible(!isFiltersVisible);
     }
@@ -58,13 +69,15 @@ var TeacherList = function () {
             var response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, api_1["default"].get("classes", {
-                            params: {
-                                subject: subject,
-                                week_day: week_day,
-                                time: time
-                            }
-                        })];
+                    case 0:
+                        loadFavorites();
+                        return [4 /*yield*/, api_1["default"].get("classes", {
+                                params: {
+                                    subject: subject,
+                                    week_day: week_day,
+                                    time: time
+                                }
+                            })];
                     case 1:
                         response = _a.sent();
                         setTeachers(response.data);
@@ -91,6 +104,6 @@ var TeacherList = function () {
         react_1["default"].createElement(react_native_1.ScrollView, { style: styles_1["default"].teacherList, contentContainerStyle: {
                 paddingHorizontal: 16,
                 paddingBottom: 16
-            } }, teachers.map(function (teacher) { return (react_1["default"].createElement(TeacherItem_1["default"], { key: teacher.id, teacher: teacher })); }))));
+            } }, teachers.map(function (teacher) { return (react_1["default"].createElement(TeacherItem_1["default"], { key: teacher.id, teacher: teacher, favorited: favorites.includes(teacher.id) })); }))));
 };
 exports["default"] = TeacherList;
