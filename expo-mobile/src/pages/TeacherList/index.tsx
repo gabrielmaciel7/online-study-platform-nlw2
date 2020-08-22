@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { View, ScrollView, Text } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import AsynStorage from "@react-native-community/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-community/async-storage";
 
 import api from "../../services/api";
 import styles from "./styles";
@@ -23,8 +24,12 @@ const TeacherList: React.FC = () => {
   const [week_day, setWeekDay] = useState("");
   const [time, setTime] = useState("");
 
+  useFocusEffect(() => {
+    loadFavorites();
+  });
+
   function loadFavorites() {
-    AsynStorage.getItem("favorites").then((res) => {
+    AsyncStorage.getItem("favorites").then((res) => {
       if (res) {
         const favoritedTeachers = JSON.parse(res);
         const favoritedTeachersIds = favoritedTeachers.map(

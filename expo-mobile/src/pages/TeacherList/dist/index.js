@@ -39,6 +39,7 @@ exports.__esModule = true;
 var react_1 = require("react");
 var react_native_1 = require("react-native");
 var vector_icons_1 = require("@expo/vector-icons");
+var native_1 = require("@react-navigation/native");
 var async_storage_1 = require("@react-native-community/async-storage");
 var api_1 = require("../../services/api");
 var styles_1 = require("./styles");
@@ -52,6 +53,9 @@ var TeacherList = function () {
     var _d = react_1.useState(""), subject = _d[0], setSubject = _d[1];
     var _e = react_1.useState(""), week_day = _e[0], setWeekDay = _e[1];
     var _f = react_1.useState(""), time = _f[0], setTime = _f[1];
+    native_1.useFocusEffect(function () {
+        loadFavorites();
+    });
     function loadFavorites() {
         async_storage_1["default"].getItem("favorites").then(function (res) {
             if (res) {
