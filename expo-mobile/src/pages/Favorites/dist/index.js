@@ -9,9 +9,9 @@ var PageHeader_1 = require("../../Components/PageHeader");
 var TeacherItem_1 = require("../../Components/TeacherItem");
 var Favorites = function () {
     var _a = react_1.useState([]), favorites = _a[0], setFavorites = _a[1];
-    native_1.useFocusEffect(function () {
+    native_1.useFocusEffect(react_1.useCallback(function () {
         loadFavorites();
-    });
+    }, []));
     function loadFavorites() {
         async_storage_1["default"].getItem("favorites").then(function (res) {
             if (res) {

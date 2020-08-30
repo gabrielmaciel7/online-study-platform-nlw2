@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { View, ScrollView, Text } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
@@ -24,9 +24,11 @@ const TeacherList: React.FC = () => {
   const [week_day, setWeekDay] = useState("");
   const [time, setTime] = useState("");
 
-  useFocusEffect(() => {
-    loadFavorites();
-  });
+  useFocusEffect(
+    useCallback(() => {
+      loadFavorites();
+    }, [])
+  );
 
   function loadFavorites() {
     AsyncStorage.getItem("favorites").then((res) => {

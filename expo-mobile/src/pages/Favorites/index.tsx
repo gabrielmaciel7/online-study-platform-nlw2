@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { View, ScrollView } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-community/async-storage";
@@ -11,9 +11,11 @@ import TeacherItem, { Teacher } from "../../Components/TeacherItem";
 const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState([]);
 
-  useFocusEffect(() => {
-    loadFavorites();
-  });
+  useFocusEffect(
+    useCallback(() => {
+      loadFavorites();
+    }, [])
+  );
 
   function loadFavorites() {
     AsyncStorage.getItem("favorites").then((res) => {

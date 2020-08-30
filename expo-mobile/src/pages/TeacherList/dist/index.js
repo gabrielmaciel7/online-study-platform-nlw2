@@ -53,9 +53,9 @@ var TeacherList = function () {
     var _d = react_1.useState(""), subject = _d[0], setSubject = _d[1];
     var _e = react_1.useState(""), week_day = _e[0], setWeekDay = _e[1];
     var _f = react_1.useState(""), time = _f[0], setTime = _f[1];
-    native_1.useFocusEffect(function () {
+    native_1.useFocusEffect(react_1.useCallback(function () {
         loadFavorites();
-    });
+    }, []));
     function loadFavorites() {
         async_storage_1["default"].getItem("favorites").then(function (res) {
             if (res) {
