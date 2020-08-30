@@ -13,6 +13,7 @@ import {
 } from "@expo-google-fonts/poppins";
 
 import AppStack from "./src/routes/AppStack";
+import { FavoritesProvider } from "./src/contexts/favorites";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -26,10 +27,10 @@ export default function App() {
     return <AppLoading />;
   } else {
     return (
-      <>
+      <FavoritesProvider>
         <AppStack />
         <StatusBar style="light" />
-      </>
+      </FavoritesProvider>
     );
   }
 }
