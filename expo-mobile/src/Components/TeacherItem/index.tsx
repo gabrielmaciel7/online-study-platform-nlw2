@@ -39,10 +39,17 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited }) => {
   const [isFavorited, setIsFavorited] = useState(favorited);
 
   useEffect(() => {
-    //buscar dados favoritados
-    //ver se o item esta favoritado
-    //setIsFavorited
-  }, [favoritesTeachers])
+    const favoriteIndex = getFavoriteIndex()
+
+    if (favoriteIndex !== -1 && !isFavorited) {
+      setIsFavorited(true);
+    }
+
+    if (favoriteIndex === -1 && isFavorited) {
+      setIsFavorited(false);
+    }
+
+  }, [favoritesTeachers]);
 
   function createNewConnection() {
     api.post("connections", {
@@ -59,22 +66,26 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited }) => {
     await loadFavorites();
 
     if (isFavorited) {
-      const favoriteIndex = favoritesTeachers.findIndex(
-        (teacherItem: Teacher) => {
-          return teacherItem.id === teacher.id;
-        }
-      );
+      const favoriteIndex = getFavoriteIndex()
 
       removeFavorite(favoriteIndex);
-
       setIsFavorited(false);
     } else {
       insertFavorite(teacher);
-
       setIsFavorited(true);
     }
 
-    await updateFavorites();
+    updateFavorites();
+  }
+
+  function getFavoriteIndex() {
+    const favoriteIndex = favoritesTeachers.findIndex(
+      (teacherItem: Teacher) => {
+        return teacherItem.id === teacher.id;
+      }
+    );
+
+    return favoriteIndex
   }
 
   return (
