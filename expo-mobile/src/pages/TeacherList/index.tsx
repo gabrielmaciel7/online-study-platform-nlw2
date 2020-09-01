@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useContext } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import { View, ScrollView, Text } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";

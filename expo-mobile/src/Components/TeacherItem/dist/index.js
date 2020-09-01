@@ -45,9 +45,12 @@ var styles_1 = require("./styles");
 var heart_outline_png_1 = require("../../assets/images/icons/heart-outline.png");
 var unfavorite_png_1 = require("../../assets/images/icons/unfavorite.png");
 var whatsapp_png_1 = require("../../assets/images/icons/whatsapp.png");
+var favorites_1 = require("../../contexts/favorites");
 var TeacherItem = function (_a) {
     var teacher = _a.teacher, favorited = _a.favorited;
-    var _b = react_1.useState(favorited), isFavorited = _b[0], setIsFavorited = _b[1];
+    var _b = react_1.useContext(favorites_1["default"]), favoritesTeachers = _b.favoritesTeachers, loadFavorites = _b.loadFavorites;
+    var _c = react_1.useState(favorited), isFavorited = _c[0], setIsFavorited = _c[1];
+    console.log("favoritado:", isFavorited);
     function createNewConnection() {
         api_1["default"].post("connections", {
             user_id: teacher.id
@@ -59,28 +62,24 @@ var TeacherItem = function (_a) {
     }
     function handleToggleFavorite() {
         return __awaiter(this, void 0, void 0, function () {
-            var favorites, favoritesArray, favoriteIndex;
+            var favoriteIndex;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, async_storage_1["default"].getItem("favorites")];
+                    case 0: return [4 /*yield*/, loadFavorites()];
                     case 1:
-                        favorites = _a.sent();
-                        favoritesArray = [];
-                        if (favorites) {
-                            favoritesArray = JSON.parse(favorites);
-                        }
+                        _a.sent();
                         if (isFavorited) {
-                            favoriteIndex = favoritesArray.findIndex(function (teacherItem) {
+                            favoriteIndex = favoritesTeachers.findIndex(function (teacherItem) {
                                 return teacherItem.id === teacher.id;
                             });
-                            favoritesArray.splice(favoriteIndex, 1);
+                            favoritesTeachers.splice(favoriteIndex, 1);
                             setIsFavorited(false);
                         }
                         else {
-                            favoritesArray.push(teacher);
+                            favoritesTeachers.push(teacher);
                             setIsFavorited(true);
                         }
-                        return [4 /*yield*/, async_storage_1["default"].setItem("favorites", JSON.stringify(favoritesArray))];
+                        return [4 /*yield*/, async_storage_1["default"].setItem("favorites", JSON.stringify(favoritesTeachers))];
                     case 2:
                         _a.sent();
                         return [2 /*return*/];

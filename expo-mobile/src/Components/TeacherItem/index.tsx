@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { View, Image, Text, Linking } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-community/async-storage";
@@ -9,6 +9,8 @@ import styles from "./styles";
 import heartOutlineIcon from "../../assets/images/icons/heart-outline.png";
 import unfavoriteIcon from "../../assets/images/icons/unfavorite.png";
 import whatsappIcon from "../../assets/images/icons/whatsapp.png";
+
+import FavoritesContext from "../../contexts/favorites";
 
 export interface Teacher {
   id: number;
@@ -26,7 +28,21 @@ interface TeacherItemProps {
 }
 
 const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited }) => {
+  const {
+    favoritesTeachers,
+    loadFavorites,
+    removeFavorite,
+    insertFavorite,
+    updateFavorites,
+  } = useContext(FavoritesContext);
+
   const [isFavorited, setIsFavorited] = useState(favorited);
+
+  useEffect(() => {
+    //buscar dados favoritados
+    //ver se o item esta favoritado
+    //setIsFavorited
+  }, [favoritesTeachers])
 
   function createNewConnection() {
     api.post("connections", {
@@ -40,29 +56,25 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited }) => {
   }
 
   async function handleToggleFavorite() {
-    const favorites = await AsyncStorage.getItem("favorites");
-
-    let favoritesArray = [];
-
-    if (favorites) {
-      favoritesArray = JSON.parse(favorites);
-    }
+    await loadFavorites();
 
     if (isFavorited) {
-      const favoriteIndex = favoritesArray.findIndex((teacherItem: Teacher) => {
-        return teacherItem.id === teacher.id;
-      });
+      const favoriteIndex = favoritesTeachers.findIndex(
+        (teacherItem: Teacher) => {
+          return teacherItem.id === teacher.id;
+        }
+      );
 
-      favoritesArray.splice(favoriteIndex, 1);
+      removeFavorite(favoriteIndex);
 
       setIsFavorited(false);
     } else {
-      favoritesArray.push(teacher);
+      insertFavorite(teacher);
 
       setIsFavorited(true);
     }
 
-    await AsyncStorage.setItem("favorites", JSON.stringify(favoritesArray));
+    await updateFavorites();
   }
 
   return (
