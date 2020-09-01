@@ -8,10 +8,14 @@ import styles from "./styles";
 import giveClassesBgImg from "../../assets/images/give-classes-background.png";
 
 const GiveClasses: React.FC = () => {
-  const { goBack } = useNavigation();
+  const { goBack, navigate } = useNavigation();
 
   function handleNavigateBack() {
     goBack();
+  }
+
+  function handleNavigationToWebGiveClassesPage() {
+    navigate("WebGiveClasses");
   }
 
   return (
@@ -28,9 +32,21 @@ const GiveClasses: React.FC = () => {
         </Text>
       </ImageBackground>
 
-      <RectButton onPress={handleNavigateBack} style={styles.okButton}>
-        <Text style={styles.okButtonText}>Tudo bem</Text>
-      </RectButton>
+      <View style={styles.buttonsContainer}>
+        <RectButton
+          onPress={handleNavigateBack}
+          style={[styles.button, styles.buttonPrimary]}
+        >
+          <Text style={styles.buttonText}>Voltar</Text>
+        </RectButton>
+
+        <RectButton
+          onPress={handleNavigationToWebGiveClassesPage}
+          style={[styles.button, styles.buttonSecondary]}
+        >
+          <Text style={styles.buttonText}>Cadastrar-se</Text>
+        </RectButton>
+      </View>
     </View>
   );
 };

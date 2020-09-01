@@ -30,19 +30,34 @@ const styles = StyleSheet.create({
     maxWidth: 240,
   },
 
-  okButton: {
-    marginVertical: 40,
-    backgroundColor: "#04d361",
-    height: 58,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 8,
+  buttonsContainer: {
+    flexDirection: "row",
+    marginTop: 40,
+    justifyContent: "space-between",
   },
 
-  okButtonText: {
-    color: "#FFF",
-    fontSize: 16,
+  button: {
+    height: 100,
+    borderRadius: 8,
+    padding: 24,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  buttonPrimary: {
+    backgroundColor: "#9871f5",
+    width: "38%",
+  },
+
+  buttonSecondary: {
+    backgroundColor: "#04d361",
+    width: "58%",
+  },
+
+  buttonText: {
     fontFamily: "Archivo_700Bold",
+    color: "#FFF",
+    fontSize: 20,
   },
 });
 

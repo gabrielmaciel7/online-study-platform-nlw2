@@ -9,7 +9,7 @@ import backIcon from "../../assets/images/icons/back.png";
 import logoImg from "../../assets/images/logo.png";
 
 interface PageHeaderProps {
-  title: string;
+  title?: string;
   headerRight?: ReactNode;
 }
 
@@ -34,10 +34,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         <Image source={logoImg} resizeMode="contain" />
       </View>
 
-      <View style={styles.header}>
-        <Text style={styles.title}>{title}</Text>
-        {headerRight}
-      </View>
+      {title ? (
+        <View style={styles.header}>
+          <Text style={styles.title}>{title}</Text>
+          {headerRight}
+        </View>
+      ) : null}
 
       {children}
     </View>
