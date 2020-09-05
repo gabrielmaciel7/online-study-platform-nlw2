@@ -1,7 +1,7 @@
 import React, { createContext, useState } from "react";
 import AsyncStorage from "@react-native-community/async-storage";
 
-import { Teacher } from "../Components/TeacherItem";
+import { Teacher } from "../components/TeacherItem";
 
 interface FavoritesContextData {
   favoritesTeachers: Teacher[];

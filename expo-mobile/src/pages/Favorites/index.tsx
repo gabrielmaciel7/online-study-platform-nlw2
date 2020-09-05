@@ -4,8 +4,8 @@ import { useFocusEffect } from "@react-navigation/native";
 
 import styles from "./styles";
 
-import PageHeader from "../../Components/PageHeader";
-import TeacherItem, { Teacher } from "../../Components/TeacherItem";
+import PageHeader from "../../components/PageHeader";
+import TeacherItem, { Teacher } from "../../components/TeacherItem";
 
 import FavoritesContext from "../../contexts/favorites";
 

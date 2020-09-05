@@ -1,27 +1,31 @@
-import React, { useState, useCallback, useContext } from "react";
-import { View, ScrollView, Text } from "react-native";
+import React, { useState, useCallback, useContext, useEffect } from "react";
+import { View, ScrollView, Text, Picker, Platform } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
-
-import api from "../../services/api";
-import styles from "./styles";
-
-import PageHeader from "../../Components/PageHeader";
-import TeacherItem, { Teacher } from "../../Components/TeacherItem";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import {
   TextInput,
   BorderlessButton,
   RectButton,
 } from "react-native-gesture-handler";
+
+import api from "../../services/api";
+import styles from "./styles";
+
+import PageHeader from "../../components/PageHeader";
+import TeacherItem, { Teacher } from "../../components/TeacherItem";
+
 import FavoritesContext from "../../contexts/favorites";
 
 const TeacherList: React.FC = () => {
   const [teachers, setTeachers] = useState([]);
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
 
-  const [subject, setSubject] = useState("");
-  const [week_day, setWeekDay] = useState("");
-  const [time, setTime] = useState("");
+  const [subject, setSubject] = useState("Selecione a matéria");
+  const [week_day, setWeekDay] = useState("Dia");
+  const [time, setTime] = useState<string | null>(null);
+
+  const [show, setShow] = useState(false);
 
   const { favoritesIds, loadFavorites } = useContext(FavoritesContext);
 
@@ -31,6 +35,8 @@ const TeacherList: React.FC = () => {
     }, [])
   );
 
+  console.log(teachers !== []);
+
   function handleToggleFiltersVisible() {
     setIsFiltersVisible(!isFiltersVisible);
   }
@@ -38,17 +44,37 @@ const TeacherList: React.FC = () => {
   async function handleFiltersSubmit() {
     loadFavorites();
 
-    const response = await api.get("classes", {
-      params: {
-        subject,
-        week_day,
-        time,
-      },
-    });
+    if (subject && week_day && time) {
+      const response = await api.get("classes", {
+        params: {
+          subject,
+          week_day,
+          time,
+        },
+      });
 
-    setTeachers(response.data);
+      setTeachers(response.data);
+    }
+
     setIsFiltersVisible(false);
   }
+
+  const onChange = (event: Event, selectedTime?: Date) => {
+    setShow(false);
+
+    if (selectedTime) {
+      setTime(
+        selectedTime
+          .toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+          .substr(0, 5)
+      );
+    } else {
+      setTime(time);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -63,35 +89,52 @@ const TeacherList: React.FC = () => {
         {isFiltersVisible && (
           <View style={styles.searchForm}>
             <Text style={styles.label}>Matéria</Text>
-            <TextInput
-              style={styles.input}
-              value={subject}
-              onChangeText={(text) => setSubject(text)}
-              placeholder="Qual a matéria?"
-              placeholderTextColor="#c1bccc"
-            />
+            <View style={styles.input}>
+              <Picker
+                style={{ width: "100%", height: "100%" }}
+                selectedValue={subject}
+                onValueChange={(itemValue, itemIndex) => setSubject(itemValue)}
+              >
+                <Picker.Item label="Selecione a matéria" value={null} />
+                <Picker.Item label="Artes" value="Artes" />
+                <Picker.Item label="Matemática" value="Matemática" />
+              </Picker>
+            </View>
 
             <View style={styles.inputGroup}>
               <View style={styles.inputBlock}>
                 <Text style={styles.label}>Dia da semana</Text>
-                <TextInput
-                  style={styles.input}
-                  value={week_day}
-                  onChangeText={(text) => setWeekDay(text)}
-                  placeholder="Qual o dia?"
-                  placeholderTextColor="#c1bccc"
-                />
+                <View style={styles.input}>
+                  <Picker
+                    style={{ width: "100%", height: "100%" }}
+                    selectedValue={week_day}
+                    onValueChange={(itemValue, itemIndex) =>
+                      setWeekDay(itemValue)
+                    }
+                  >
+                    <Picker.Item label="Dia" value={null} />
+                    <Picker.Item label="Domingo" value="0" />
+                    <Picker.Item label="Segunda-feira" value="1" />
+                  </Picker>
+                </View>
               </View>
 
               <View style={styles.inputBlock}>
                 <Text style={styles.label}>Horário</Text>
-                <TextInput
-                  style={styles.input}
-                  value={time}
-                  onChangeText={(text) => setTime(text)}
-                  placeholder="Qual o horário?"
-                  placeholderTextColor="#c1bccc"
-                />
+                <RectButton style={styles.input} onPress={() => setShow(true)}>
+                  <Text>{time || "Horário"}</Text>
+                </RectButton>
+
+                {show && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={new Date()}
+                    mode="time"
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChange}
+                  />
+                )}
               </View>
             </View>
 
@@ -112,13 +155,19 @@ const TeacherList: React.FC = () => {
           paddingBottom: 16,
         }}
       >
-        {teachers.map((teacher: Teacher) => (
-          <TeacherItem
-            key={teacher.id}
-            teacher={teacher}
-            favorited={favoritesIds.includes(teacher.id)}
-          />
-        ))}
+        {teachers.length > 0 ? (
+          teachers.map((teacher: Teacher) => (
+            <TeacherItem
+              key={teacher.id}
+              teacher={teacher}
+              favorited={favoritesIds.includes(teacher.id)}
+            />
+          ))
+        ) : (
+          <Text style={[styles.label, { alignSelf: "center" }]}>
+            Nenhum proffy encontrado. Faça o filtro acima.
+          </Text>
+        )}
       </ScrollView>
     </View>
   );
