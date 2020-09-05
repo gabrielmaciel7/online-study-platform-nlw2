@@ -1,7 +1,6 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import { View, Image, Text, Linking } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
-import AsyncStorage from "@react-native-community/async-storage";
 
 import api from "../../services/api";
 import styles from "./styles";
@@ -38,18 +37,19 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited }) => {
 
   const [isFavorited, setIsFavorited] = useState(favorited);
 
-  useEffect(() => {
-    const favoriteIndex = getFavoriteIndex()
+  useEffect(
+    useCallback(() => {
+      const favoriteIndex = getFavoriteIndex();
 
-    if (favoriteIndex !== -1 && !isFavorited) {
-      setIsFavorited(true);
-    }
+      if (favoriteIndex !== -1 && !isFavorited) {
+        setIsFavorited(true);
+      }
 
-    if (favoriteIndex === -1 && isFavorited) {
-      setIsFavorited(false);
-    }
-
-  }, [favoritesTeachers]);
+      if (favoriteIndex === -1 && isFavorited) {
+        setIsFavorited(false);
+      }
+    }, [favoritesTeachers])
+  );
 
   function createNewConnection() {
     api.post("connections", {
@@ -66,7 +66,7 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited }) => {
     await loadFavorites();
 
     if (isFavorited) {
-      const favoriteIndex = getFavoriteIndex()
+      const favoriteIndex = getFavoriteIndex();
 
       removeFavorite(favoriteIndex);
       setIsFavorited(false);
@@ -85,7 +85,7 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited }) => {
       }
     );
 
-    return favoriteIndex
+    return favoriteIndex;
   }
 
   return (

@@ -31,8 +31,6 @@ const TeacherList: React.FC = () => {
     }, [])
   );
 
-  console.log(teachers !== []);
-
   function handleToggleFiltersVisible() {
     setIsFiltersVisible(!isFiltersVisible);
   }
