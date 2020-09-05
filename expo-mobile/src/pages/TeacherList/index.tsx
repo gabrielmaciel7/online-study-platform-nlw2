@@ -1,13 +1,9 @@
-import React, { useState, useCallback, useContext, useEffect } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import { View, ScrollView, Text, Picker, Platform } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import {
-  TextInput,
-  BorderlessButton,
-  RectButton,
-} from "react-native-gesture-handler";
+import DateTimePicker, { Event } from "@react-native-community/datetimepicker";
+import { BorderlessButton, RectButton } from "react-native-gesture-handler";
 
 import api from "../../services/api";
 import styles from "./styles";
@@ -101,6 +97,7 @@ const TeacherList: React.FC = () => {
                 <Picker.Item label="Física" value="Física" />
                 <Picker.Item label="Química" value="Química" />
                 <Picker.Item label="História" value="História" />
+                <Picker.Item label="Matemática" value="Matemática" />
                 <Picker.Item label="Português" value="Português" />
                 <Picker.Item label="Educação Física" value="Educação Física" />
               </Picker>
@@ -132,7 +129,7 @@ const TeacherList: React.FC = () => {
               <View style={styles.inputBlock}>
                 <Text style={styles.label}>Horário</Text>
                 <RectButton style={styles.input} onPress={() => setShow(true)}>
-                  <Text>{time || "Horário"}</Text>
+                  <Text style={{ fontSize: 16 }}>{time || "Horário"}</Text>
                 </RectButton>
 
                 {show && (
