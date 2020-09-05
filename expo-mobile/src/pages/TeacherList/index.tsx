@@ -97,7 +97,12 @@ const TeacherList: React.FC = () => {
               >
                 <Picker.Item label="Selecione a matéria" value={null} />
                 <Picker.Item label="Artes" value="Artes" />
-                <Picker.Item label="Matemática" value="Matemática" />
+                <Picker.Item label="Biologia" value="Biologia" />
+                <Picker.Item label="Física" value="Física" />
+                <Picker.Item label="Química" value="Química" />
+                <Picker.Item label="História" value="História" />
+                <Picker.Item label="Português" value="Português" />
+                <Picker.Item label="Educação Física" value="Educação Física" />
               </Picker>
             </View>
 
@@ -115,6 +120,11 @@ const TeacherList: React.FC = () => {
                     <Picker.Item label="Dia" value={null} />
                     <Picker.Item label="Domingo" value="0" />
                     <Picker.Item label="Segunda-feira" value="1" />
+                    <Picker.Item label="Terça-feira" value="2" />
+                    <Picker.Item label="Quarta-feira" value="3" />
+                    <Picker.Item label="Quinta-feira" value="4" />
+                    <Picker.Item label="Sexta-feira" value="5" />
+                    <Picker.Item label="Sábado" value="6" />
                   </Picker>
                 </View>
               </View>
