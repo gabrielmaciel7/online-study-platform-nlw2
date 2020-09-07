@@ -140,7 +140,8 @@ const TeacherForm = () => {
             />
             <Input
               name="avatar"
-              label="Avatar"
+              label="Avatar (imagem)"
+              placeholder="https://"
               value={avatar}
               onChange={(e) => {
                 setAvatar(e.target.value);
@@ -188,7 +189,7 @@ const TeacherForm = () => {
 
             <Input
               name="cost"
-              label="Custo da sua hora por aula"
+              label="Custo da sua hora por aula (R$)"
               value={cost}
               onChange={(e) => {
                 setCost(e.target.value);
