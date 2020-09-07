@@ -68,6 +68,27 @@ const TeacherForm = () => {
     setScheduleItems(updatedScheduleItems);
   }
 
+  async function startAnimation(
+    animationOk: boolean,
+    animationError: boolean,
+    animationLabel: string
+  ) {
+    setAnimation({
+      ...animation,
+      isVisible: true,
+      animationOk,
+      animationError,
+      animationLabel,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 2500));
+
+    setAnimation({
+      ...animation,
+      isVisible: false,
+    });
+  }
+
   async function handleCreateClass(e: FormEvent) {
     e.preventDefault();
 
@@ -82,37 +103,19 @@ const TeacherForm = () => {
         schedule: scheduleItems,
       });
 
-      setAnimation({
-        ...animation,
-        isVisible: true,
-        animationOk: true,
-        animationError: false,
-        animationLabel: "Cadastro realizado com sucesso",
-      });
+      const animationOk = true;
+      const animationError = false;
+      const animationLabel = "Cadastro realizado com sucesso";
 
-      await new Promise((resolve) => setTimeout(resolve, 2500));
-
-      setAnimation({
-        ...animation,
-        isVisible: false,
-      });
+      await startAnimation(animationOk, animationError, animationLabel);
 
       history.push("/");
     } catch (error) {
-      setAnimation({
-        ...animation,
-        isVisible: true,
-        animationOk: false,
-        animationError: true,
-        animationLabel: "Erro no cadastro.",
-      });
+      const animationOk = false;
+      const animationError = true;
+      const animationLabel = "Erro no cadastro.";
 
-      await new Promise((resolve) => setTimeout(resolve, 2500));
-
-      setAnimation({
-        ...animation,
-        isVisible: false,
-      });
+      await startAnimation(animationOk, animationError, animationLabel);
     }
   }
 
