@@ -1,6 +1,6 @@
 <h1> Online Study Platform </h1> 
 
-<h4> This project was developed in the event Next Level Week (NLW) 2, organized by
+<h4> This project was developed at the event Next Level Week (NLW) 2, organized by
 <a href="https://rocketseat.com.br/">Rocketseat</a>.
 </h4>
 
